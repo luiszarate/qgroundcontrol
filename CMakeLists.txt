@@ -291,20 +291,24 @@ endif()
 # ----------------------------------------------------------------------------
 # Translation/Localization Configuration
 # ----------------------------------------------------------------------------
-file(GLOB TS_SOURCES "${CMAKE_SOURCE_DIR}/translations/qgc_*.ts")
-set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/i18n")
+if(NOT IOS)
+    file(GLOB TS_SOURCES "${CMAKE_SOURCE_DIR}/translations/qgc_*.ts")
+    set_source_files_properties(${TS_SOURCES} PROPERTIES OUTPUT_LOCATION "${CMAKE_BINARY_DIR}/i18n")
 
-qt_add_translations(${CMAKE_PROJECT_NAME}
-    TS_FILES ${TS_SOURCES}
-    RESOURCE_PREFIX "/"
-    LUPDATE_OPTIONS -no-obsolete
-    TS_FILE_DIR "${CMAKE_SOURCE_DIR}/translations"
-    TS_FILE_BASE ${CMAKE_PROJECT_NAME}
-    # TS_FILES_OUTPUT_VARIABLE _ts_files_generated
-    # TS_OUTPUT_DIRECTORY "{CMAKE_SOURCE_DIR}/translations"
-    # QM_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/i18n"
-    # MERGE_QT_TRANSLATIONS
-)
+    qt_add_translations(${CMAKE_PROJECT_NAME}
+        TS_FILES ${TS_SOURCES}
+        RESOURCE_PREFIX "/"
+        LUPDATE_OPTIONS -no-obsolete
+        TS_FILE_DIR "${CMAKE_SOURCE_DIR}/translations"
+        TS_FILE_BASE ${CMAKE_PROJECT_NAME}
+        # TS_FILES_OUTPUT_VARIABLE _ts_files_generated
+        # TS_OUTPUT_DIRECTORY "{CMAKE_SOURCE_DIR}/translations"
+        # QM_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/i18n"
+        # MERGE_QT_TRANSLATIONS
+    )
+else()
+    message(STATUS "QGC: Skipping translations on iOS (lupdate incompatible with SDL OBJECT libraries)")
+endif()
 
 # ----------------------------------------------------------------------------
 # Qt Quick Controls Configuration
