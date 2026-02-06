@@ -538,6 +538,7 @@ void LinkManager::_updateAutoConnectLinks()
     _addZeroConfAutoConnectLink();
 #endif
 
+#ifndef QGC_NO_SERIAL_LINK
     // check to see if nmea gps is configured for UDP input, if so, set it up to connect
     if (_autoConnectSettings->autoConnectNmeaPort()->cookedValueString() == "UDP Port") {
         if ((_nmeaSocket->localPort() != _autoConnectSettings->nmeaUdpPort()->rawValue().toUInt()) || (_nmeaSocket->state() != UdpIODevice::BoundState)) {
@@ -546,17 +547,16 @@ void LinkManager::_updateAutoConnectLinks()
             _nmeaSocket->bind(QHostAddress::AnyIPv4, _autoConnectSettings->nmeaUdpPort()->rawValue().toUInt());
             QGCPositionManager::instance()->setNmeaSourceDevice(_nmeaSocket);
         }
-#ifndef QGC_NO_SERIAL_LINK
         if (_nmeaPort) {
             _nmeaPort->close();
             delete _nmeaPort;
             _nmeaPort = nullptr;
             _nmeaDeviceName = "";
         }
-#endif
     } else {
         _nmeaSocket->close();
     }
+#endif
 
 #ifndef QGC_NO_SERIAL_LINK
     _addSerialAutoConnectLink();
