@@ -5,7 +5,10 @@
 #include "QGCCommandLineParser.h"
 #include "QGCLogging.h"
 #include "Platform.h"
+
+#ifndef QGC_NO_SERIAL_LINK
 #include "NTRIP.h"
+#endif
 
 #if !defined(Q_OS_ANDROID) && !defined(Q_OS_IOS)
     #include <QtWidgets/QMessageBox>
